@@ -12,8 +12,8 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
-public class user {
+@Table(name = "users")
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +28,4 @@ public class user {
     private String password;
 
     private boolean admin;
-
 }

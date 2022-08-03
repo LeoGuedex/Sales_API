@@ -2,7 +2,6 @@ package leoguedex.com.github.API_Sales_Java.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
@@ -13,13 +12,13 @@ import java.util.Set;
 
 @Data
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "client")
 public class Client {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -34,5 +33,5 @@ public class Client {
 
     @JsonIgnore
     @OneToMany(mappedBy = "client")
-    private Set<Order> orders;
+    private Set<Orders> orders;
 }

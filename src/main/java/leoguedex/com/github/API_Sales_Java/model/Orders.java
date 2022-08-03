@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,8 +15,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order")
-public class Order {
+@Table(name = "orders")
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,7 @@ public class Order {
     @Column(name = "status")
     private StatusOrder statusOrder;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "orders")
     private List<OrderedItem> items;
 
 }
