@@ -7,11 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -58,8 +54,8 @@ public class ClientService {
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-        Example<Client> clientFiltrado = Example.of(client, exampleMatcher);
-        return clientRepository.findAll(clientFiltrado);
+        Example<Client> clientFiltration = Example.of(client, exampleMatcher);
+        return clientRepository.findAll(clientFiltration);
     }
 
 }

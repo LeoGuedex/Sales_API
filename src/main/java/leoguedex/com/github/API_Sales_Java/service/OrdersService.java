@@ -34,11 +34,11 @@ public class OrdersService {
 
     public Orders includeOrder(OrdersDto ordersDto) {
 
-        validItens(ordersDto);
-        Client cliente = findCliente(ordersDto);
-        Orders pedido = builderPedido(ordersDto, cliente);
+        validItems(ordersDto);
+        Client cliente = findClient(ordersDto);
+        Orders pedido = builderOrder(ordersDto, cliente);
 
-        List<OrderedItem> itens = builderItemPedido(ordersDto, pedido);
+        List<OrderedItem> itens = builderItemOrder(ordersDto, pedido);
         ordersRepository.save(pedido);
         orderedItemRepository.saveAll(itens);
 
@@ -60,7 +60,7 @@ public class OrdersService {
     }
 
 
-    private List<OrderedItem> builderItemPedido(OrdersDto ordersDto, Orders orders) {
+    private List<OrderedItem> builderItemOrder(OrdersDto ordersDto, Orders orders) {
         return ordersDto.getItems().stream()
                 .map(itemsOrdersDto -> {
                     Product produto = productRepository.findById(itemsOrdersDto.getProduct())
@@ -74,13 +74,13 @@ public class OrdersService {
                 .collect(Collectors.toList());
     }
 
-    private void validItens(OrdersDto ordersDto) {
+    private void validItems(OrdersDto ordersDto) {
         if (ordersDto.getItems().isEmpty()) {
             throw new BusinessRulesException("It is not possible to place an order without items.");
         }
     }
 
-    private Orders builderPedido(OrdersDto pedidoDto, Client client) {
+    private Orders builderOrder(OrdersDto pedidoDto, Client client) {
         return Orders.builder()
                 .client(client)
                 .dateOrder(LocalDate.now())
@@ -89,7 +89,7 @@ public class OrdersService {
                 .build();
     }
 
-    private Client findCliente(OrdersDto ordersDto) {
+    private Client findClient(OrdersDto ordersDto) {
         return clientRepository.findById(ordersDto.getClient())
                 .orElseThrow(() -> new BusinessRulesException("Client code invalid"));
     }
