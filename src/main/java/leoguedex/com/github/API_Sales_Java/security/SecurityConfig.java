@@ -1,8 +1,8 @@
 package leoguedex.com.github.API_Sales_Java.security;
 
-import com.github.com.leoguedex.vendas.security.jwt.JwtAuthFilter;
-import com.github.com.leoguedex.vendas.security.jwt.JwtService;
-import com.github.com.leoguedex.vendas.service.impl.UsuarioServiceImpl;
+import leoguedex.com.github.API_Sales_Java.security.jwt.JwtAuthFilter;
+import leoguedex.com.github.API_Sales_Java.security.jwt.JwtService;
+import leoguedex.com.github.API_Sales_Java.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -22,25 +22,25 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UsuarioServiceImpl usuarioService;
+    private UsersService usersService;
 
     @Autowired
     private JwtService jwtService;
 
 
-    @Bean //CRIAR UM GRÃO
+    @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public OncePerRequestFilter jwtAuthFilter(){
-        return new JwtAuthFilter(jwtService, usuarioService);
+        return new JwtAuthFilter(jwtService, usersService);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(usuarioService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(usersService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -48,10 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable() //desabilita da memoria os end points
                 .authorizeRequests()
-                .antMatchers("/api/clientes/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/api/pedidos/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("api/produtos/**").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/api/usuarios/**").permitAll()
+                .antMatchers("/api/client/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/orders/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/product/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/users/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
