@@ -8,4 +8,5 @@ public class TokenDto {
 
     private String login;
     private String password;
+
 }

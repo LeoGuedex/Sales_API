@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@Api(value = "API by Orders")
+@Api(value = "Orders API")
 @RequestMapping("/api/orders")
 public class OrdersController {
 
@@ -72,6 +72,7 @@ public class OrdersController {
 
     private InformationOrderDto builderInformacaoPedidoDto(Orders orders) {
         String dataPedido = orders.getDateOrder().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
         return InformationOrderDto.builder()
                 .code(orders.getId())
                 .orderDate(dataPedido)
@@ -92,4 +93,5 @@ public class OrdersController {
                     .build()
                 ).collect(Collectors.toList());
     }
+
 }

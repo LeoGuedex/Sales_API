@@ -9,7 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestControllerAdvice
 public class ApplicationControlerAdvice {
 
@@ -42,6 +41,5 @@ public class ApplicationControlerAdvice {
     public  ApiErrors handlerOrderNotFoundException(OrderNotFoundException ex){
         return new ApiErrors(ex.getMessage());
     }
-
 
 }

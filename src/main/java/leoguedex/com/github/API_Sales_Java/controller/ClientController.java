@@ -5,19 +5,19 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import leoguedex.com.github.API_Sales_Java.model.Client;
-import leoguedex.com.github.API_Sales_Java.repository.ClientRepository;
+import leoguedex.com.github.API_Sales_Java.model.dto.ClientDTO;
 import leoguedex.com.github.API_Sales_Java.service.ClientService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@Api(value = "API De Client")
+@Api(value = "Client API")
 @RequestMapping("/api/client")
 public class ClientController {
 
@@ -33,12 +33,12 @@ public class ClientController {
             @ApiResponse(code = 403, message = "User without access right")
     })
     @ResponseStatus(HttpStatus.CREATED)
-    public Client includeClient(@RequestBody @Valid Client client) {
+    public Client registerClient(@RequestBody @Valid Client client) {
         return clientService.includeClient(client);
-    }
+    }     
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "Update data in the client")
+    @ApiOperation(value = "Update data in client")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Client update with successfully"),
             @ApiResponse(code = 400, message = "Validation error"),
@@ -47,7 +47,15 @@ public class ClientController {
             @ApiResponse(code = 404, message = "User not found")
     })
     @ResponseStatus(HttpStatus.OK)
-    public void updateClient(@PathVariable Integer id, @RequestBody @Valid Client client) {
+    public void updateClient(@PathVariable Integer id, @RequestBody @Valid ClientDTO clientDTO) {
+        ModelMapper mapper = new ModelMapper();
+
+        TypeMap<ClientDTO, Client> typeMap = mapper.createTypeMap(ClientDTO.class, Client.class);
+        typeMap.addMappings(map -> map.map(ClientDTO::getName, Client::setName));
+        typeMap.addMappings(map -> map.map(ClientDTO::getCpf, Client::setCpf));
+        Client client = mapper.map(clientDTO, Client.class);
+        client.setId(id);
+
         clientService.updateClient(client);
     }
 
@@ -77,7 +85,7 @@ public class ClientController {
     }
 
     @GetMapping()
-    @ApiOperation(value = "Find all client")
+    @ApiOperation(value = "Find all clients")
     @ApiResponses({
             @ApiResponse(code = 404, message = "Users not found"),
     })
@@ -87,7 +95,7 @@ public class ClientController {
     }
 
     @GetMapping("/filter")
-    @ApiOperation(value = "Filter a client by name")
+    @ApiOperation(value = "Filter client by name")
     @ResponseStatus(HttpStatus.OK)
     public List<Client> filterClient(Client client){
         return clientService.filterClient(client);

@@ -19,13 +19,11 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-
     @Value("${jwt.security.expiration}")
     private String jwtSecurityExpiration;
 
     @Value("${jwt.subscription.key}")
     private String jwtSubscriptionKey;
-
 
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(ApiSalesJavaApplication.class);
@@ -73,4 +71,5 @@ public class JwtService {
     public String getUserLogin(String token) throws ExpiredJwtException {
         return (String) getClaims(token).getSubject();
     }
+
 }

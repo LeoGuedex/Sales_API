@@ -1,6 +1,5 @@
 package leoguedex.com.github.API_Sales_Java.service;
 
-import leoguedex.com.github.API_Sales_Java.model.Client;
 import leoguedex.com.github.API_Sales_Java.model.Product;
 import leoguedex.com.github.API_Sales_Java.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

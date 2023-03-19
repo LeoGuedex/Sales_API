@@ -13,6 +13,7 @@ import leoguedex.com.github.API_Sales_Java.repository.OrderedItemRepository;
 import leoguedex.com.github.API_Sales_Java.repository.OrdersRepository;
 import leoguedex.com.github.API_Sales_Java.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,15 +26,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrdersService {
 
+    @Autowired
+    private OrdersRepository ordersRepository;
 
-    private final OrdersRepository ordersRepository;
+    @Autowired
     private final OrderedItemRepository orderedItemRepository;
+
+    @Autowired
     private final ClientRepository clientRepository;
+
+    @Autowired
     private final ProductRepository productRepository;
 
-
     public Orders includeOrder(OrdersDto ordersDto) {
-
         validItems(ordersDto);
         Client cliente = findClient(ordersDto);
         Orders pedido = builderOrder(ordersDto, cliente);
@@ -58,7 +63,6 @@ public class OrdersService {
                 })
                 .orElseThrow(() -> new OrderNotFoundException("Order not found."));
     }
-
 
     private List<OrderedItem> builderItemOrder(OrdersDto ordersDto, Orders orders) {
         return ordersDto.getItems().stream()

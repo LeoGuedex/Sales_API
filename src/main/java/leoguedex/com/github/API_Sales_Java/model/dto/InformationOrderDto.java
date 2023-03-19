@@ -21,4 +21,5 @@ public class InformationOrderDto {
     private String orderDate;
     private String status;
     private List<InformationItemOrderDto> items;
+
 }

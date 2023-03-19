@@ -71,4 +71,5 @@ public class SwaggerConfig {
                 "https://github.com/LeoGuedex",
                 "leocguedex@gmail.com");
     }
+
 }

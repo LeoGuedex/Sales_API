@@ -1,6 +1,5 @@
 package leoguedex.com.github.API_Sales_Java.model.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +16,5 @@ public class InformationItemOrderDto {
     private String productDescription;
     private BigDecimal unitPrice;
     private Integer amount;
+
 }

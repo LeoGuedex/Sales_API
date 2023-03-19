@@ -22,8 +22,6 @@ import java.util.List;
 @RequestMapping("/api/product")
 public class ProductController {
 
-    private static final String PRODUCT_NOT_FOUND = "Product Not Found";
-
     @Autowired
     private ProductService productService;
 
@@ -57,7 +55,6 @@ public class ProductController {
       productService.updateProduct(id, product);
     }
 
-
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete Product by Id")
     @ApiResponses({
@@ -83,7 +80,6 @@ public class ProductController {
         return productService.findProductById(id);
     }
 
-    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Find all Products")
     @ApiResponses({
@@ -92,7 +88,6 @@ public class ProductController {
     public List<Product> findAllProducts() {
         return productService.findAllProduct();
     }
-
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)

@@ -9,7 +9,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = NotEmptyListValidator.class)
@@ -19,4 +18,5 @@ public @interface NotEmptyList {
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+
 }
