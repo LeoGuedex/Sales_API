@@ -1,7 +1,6 @@
 package leoguedex.com.github.API_Sales_Java.validation.constraintValidation;
 
 import leoguedex.com.github.API_Sales_Java.validation.NotEmptyList;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;

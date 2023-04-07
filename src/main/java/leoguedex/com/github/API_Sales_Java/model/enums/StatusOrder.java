@@ -1,5 +1,7 @@
 package leoguedex.com.github.API_Sales_Java.model.enums;
 
+import java.util.Arrays;
+
 public enum StatusOrder {
 
     PENDING(0, "Pending"),
@@ -24,16 +26,10 @@ public enum StatusOrder {
     }
 
     public static StatusOrder toEnum(Integer cod) {
-        if (cod == null) {
-            return null;
-        }
-        for (StatusOrder x : StatusOrder.values()) {
-            if (cod.equals(x.getCod())) {
-                return x;
-            }
-        }
-
-        throw  new IllegalArgumentException("Invalid ID" + cod);
+        return Arrays.stream(StatusOrder.values())
+                .filter(x -> cod != null && cod.equals(x.getCod()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid ID " + cod));
     }
 
 }

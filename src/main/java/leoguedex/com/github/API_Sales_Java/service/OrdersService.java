@@ -13,9 +13,7 @@ import leoguedex.com.github.API_Sales_Java.repository.OrderedItemRepository;
 import leoguedex.com.github.API_Sales_Java.repository.OrdersRepository;
 import leoguedex.com.github.API_Sales_Java.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -26,17 +24,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrdersService {
 
-    @Autowired
     private OrdersRepository ordersRepository;
 
-    @Autowired
     private final OrderedItemRepository orderedItemRepository;
 
-    @Autowired
     private final ClientRepository clientRepository;
 
-    @Autowired
     private final ProductRepository productRepository;
+
+    public OrdersService(OrdersRepository ordersRepository, OrderedItemRepository orderedItemRepository,
+                         ClientRepository clientRepository, ProductRepository productRepository) {
+        this.ordersRepository = ordersRepository;
+        this.orderedItemRepository = orderedItemRepository;
+        this.clientRepository = clientRepository;
+        this.productRepository = productRepository;
+    }
 
     public Orders includeOrder(OrdersDto ordersDto) {
         validItems(ordersDto);
@@ -60,8 +62,7 @@ public class OrdersService {
                 .map(orders -> {
                     orders.setStatusOrder(statusOrder);
                     return ordersRepository.save(orders);
-                })
-                .orElseThrow(() -> new OrderNotFoundException("Order not found."));
+                }).orElseThrow(() -> new OrderNotFoundException("Order not found."));
     }
 
     private List<OrderedItem> builderItemOrder(OrdersDto ordersDto, Orders orders) {
@@ -69,13 +70,13 @@ public class OrdersService {
                 .map(itemsOrdersDto -> {
                     Product produto = productRepository.findById(itemsOrdersDto.getProduct())
                             .orElseThrow(() -> new BusinessRulesException("Código de Cliente inválido"));
+
                     return OrderedItem.builder()
                             .orders(orders)
                             .product(produto)
                             .amount(itemsOrdersDto.getAmount())
                             .build();
-                })
-                .collect(Collectors.toList());
+                }).collect(Collectors.toList());
     }
 
     private void validItems(OrdersDto ordersDto) {

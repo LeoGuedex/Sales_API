@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-
 import java.util.Locale;
 
 @Configuration
@@ -17,6 +16,7 @@ public class InternationalConfig {
         messageSource.setBasename("classpath:messages");
         messageSource.setDefaultEncoding("ISO-8859-1");
         messageSource.setDefaultLocale(Locale.getDefault());
+
         return messageSource;
     }
 
@@ -24,6 +24,7 @@ public class InternationalConfig {
     public LocalValidatorFactoryBean validatorFactoryBean (){
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         localValidatorFactoryBean.setValidationMessageSource(messageSource());
+
         return localValidatorFactoryBean;
     }
 

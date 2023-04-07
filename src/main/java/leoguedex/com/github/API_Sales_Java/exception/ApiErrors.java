@@ -1,6 +1,6 @@
 package leoguedex.com.github.API_Sales_Java.exception;
-import lombok.Getter;
 
+import lombok.Getter;
 import java.util.Arrays;
 import java.util.List;
 

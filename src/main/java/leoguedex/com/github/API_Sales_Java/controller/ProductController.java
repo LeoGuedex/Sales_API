@@ -7,13 +7,8 @@ import io.swagger.annotations.ApiResponses;
 import leoguedex.com.github.API_Sales_Java.model.Product;
 import leoguedex.com.github.API_Sales_Java.repository.ProductRepository;
 import leoguedex.com.github.API_Sales_Java.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,11 +17,14 @@ import java.util.List;
 @RequestMapping("/api/product")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    public ProductController(ProductService productService, ProductRepository productRepository) {
+        this.productService = productService;
+        this.productRepository = productRepository;
+    }
 
     @PostMapping
     @ApiOperation(value = "Insert a new Product")
@@ -38,7 +36,7 @@ public class ProductController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     public Product includeProduct(@RequestBody @Valid Product product) {
-       return productService.includeProduct(product);
+        return productService.includeProduct(product);
     }
 
     @PutMapping("/{id}")
@@ -52,7 +50,7 @@ public class ProductController {
     })
     @ResponseStatus(HttpStatus.OK)
     public void updateProduct(@PathVariable Integer id, @RequestBody @Valid Product product) {
-      productService.updateProduct(id, product);
+        productService.updateProduct(id, product);
     }
 
     @DeleteMapping("/{id}")

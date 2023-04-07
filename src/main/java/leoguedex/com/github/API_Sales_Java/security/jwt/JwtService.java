@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -31,6 +30,7 @@ public class JwtService {
         Users users = Users.builder().login("fulano").build();
         String token = jwtService.generateToken(users);
         System.out.println(token);
+
         boolean tokenValid = jwtService.tokenValid(token);
         System.out.println("Token is Valid? " + tokenValid);
         String loginUser = jwtService.getUserLogin(token);
@@ -47,6 +47,7 @@ public class JwtService {
                 .setExpiration(from)
                 .signWith(SignatureAlgorithm.HS512, jwtSubscriptionKey)
                 .compact();
+
         return token;
     }
 

@@ -10,9 +10,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -25,34 +24,27 @@ public class SwaggerConfig {
                 DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(
-                        RequestHandlerSelectors.basePackage("leoguedex.com.github.API_Sales_Java.controller"))
+                .apis(RequestHandlerSelectors.basePackage("leoguedex.com.github.API_Sales_Java.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))
+                .securityContexts(Collections.singletonList(securityContext()))
+                .securitySchemes(List.of(new ApiKey("JWT", "Authorization", "header")))
                 .apiInfo(apiInfo());
     }
 
-    private SecurityContext securityContext(){
+    private SecurityContext securityContext() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        SecurityReference securityReference = SecurityReference.builder()
+                .reference("JWT")
+                .scopes(new AuthorizationScope[]{authorizationScope})
+                .build();
+        List<SecurityReference> references = new ArrayList<>();
+        references.add(securityReference);
+
         return SecurityContext.builder()
-                .securityReferences(DefaultAuth())
+                .securityReferences(references)
                 .forPaths(PathSelectors.any())
                 .build();
-    }
-
-    private List<SecurityReference> DefaultAuth(){
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "acessEverything");
-        AuthorizationScope[] scopes = new AuthorizationScope[1];
-        scopes[0] = authorizationScope;
-        SecurityReference reference = new SecurityReference("JWT", scopes);
-        List<SecurityReference> auths = new ArrayList<>();
-        auths.add(reference);
-        return auths;
-    }
-
-    private ApiKey apiKey(){
-        return new ApiKey("JWT", "Authorization", "header");
     }
 
     private ApiInfo apiInfo(){
@@ -62,14 +54,10 @@ public class SwaggerConfig {
                 .version("1.0.0")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
-                .contact(contact())
+                .contact(new Contact("Leonardo C. Guedes",
+                        "https://github.com/LeoGuedex",
+                        "leocguedex@gmail.com"))
                 .build();
-    }
-
-    private Contact contact (){
-        return new Contact("Leonardo C. Guedes",
-                "https://github.com/LeoGuedex",
-                "leocguedex@gmail.com");
     }
 
 }

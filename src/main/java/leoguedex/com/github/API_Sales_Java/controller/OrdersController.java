@@ -12,7 +12,6 @@ import leoguedex.com.github.API_Sales_Java.model.dto.OrdersDto;
 import leoguedex.com.github.API_Sales_Java.model.dto.UpdateStatusOrderDto;
 import leoguedex.com.github.API_Sales_Java.model.enums.StatusOrder;
 import leoguedex.com.github.API_Sales_Java.service.OrdersService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,8 +25,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/orders")
 public class OrdersController {
 
-    @Autowired
-    private OrdersService ordersService;
+    private final OrdersService ordersService;
+
+    public OrdersController(OrdersService ordersService) {
+        this.ordersService = ordersService;
+    }
 
     @PostMapping
     @ApiOperation(value = "Insert a new Order")
@@ -38,8 +40,7 @@ public class OrdersController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     public Integer includeOrder(@RequestBody @Valid OrdersDto ordersDto){
-        Orders orders = ordersService.includeOrder(ordersDto);
-        return orders.getId();
+        return ordersService.includeOrder(ordersDto).getId();
     }
 
     @GetMapping("/{id}")
@@ -52,7 +53,7 @@ public class OrdersController {
     @ResponseStatus(HttpStatus.OK)
     public InformationOrderDto showOrder(@PathVariable Integer id){
         return ordersService.showOrder(id)
-                .map(orders ->  builderInformacaoPedidoDto(orders))
+                .map(this::builderInformacaoPedidoDto)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Order not found"));
     }
 
@@ -66,8 +67,7 @@ public class OrdersController {
     })
     @ResponseStatus(HttpStatus.OK)
     private void updateStatus(@PathVariable Integer id, @RequestBody UpdateStatusOrderDto updateStatusOrderDto){
-        String newStatus = updateStatusOrderDto.getNewStatus();
-        ordersService.updateStatus(id, StatusOrder.valueOf(newStatus));
+        ordersService.updateStatus(id, StatusOrder.valueOf(updateStatusOrderDto.getNewStatus()));
     }
 
     private InformationOrderDto builderInformacaoPedidoDto(Orders orders) {
@@ -86,7 +86,7 @@ public class OrdersController {
 
     private List<InformationItemOrderDto> builderInformacaoItemPedidoDto (List<OrderedItem> itens){
        return itens.stream()
-                .map(item-> InformationItemOrderDto.builder()
+                .map(item -> InformationItemOrderDto.builder()
                     .productDescription(item.getProduct().getDescription())
                     .unitPrice(item.getProduct().getPrice())
                     .amount(item.getAmount())

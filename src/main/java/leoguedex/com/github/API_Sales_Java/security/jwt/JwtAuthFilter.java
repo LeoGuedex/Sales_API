@@ -6,7 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +14,8 @@ import java.io.IOException;
 
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private JwtService jwtService;
-    private UsersService usersService;
+    private final JwtService jwtService;
+    private final UsersService usersService;
 
     public JwtAuthFilter(JwtService jwtService, UsersService usersService) {
         this.jwtService = jwtService;
@@ -27,8 +26,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
+
         if (authorization != null && authorization.startsWith("Bearer")) {
             String token = authorization.split(" ")[1];
+
             if (jwtService.tokenValid(token)) {
                 String userLogin = jwtService.getUserLogin(token);
                 UserDetails userDetails = usersService.loadUserByUsername(userLogin);
@@ -39,6 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(user);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 

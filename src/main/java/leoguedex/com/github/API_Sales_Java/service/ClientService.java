@@ -2,7 +2,6 @@ package leoguedex.com.github.API_Sales_Java.service;
 
 import leoguedex.com.github.API_Sales_Java.model.Client;
 import leoguedex.com.github.API_Sales_Java.repository.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -14,16 +13,18 @@ import java.util.Objects;
 @Service
 public class ClientService {
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
     private static final String CLIENT_NOT_FOUND = "Client not found";
+
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     public Client includeClient(Client client) {
         if (Objects.isNull(client)){
             throw new IllegalArgumentException("Client cannot be null");
         }
-
         return clientRepository.save(client);
     }
 
@@ -60,6 +61,7 @@ public class ClientService {
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example<Client> clientFiltration = Example.of(client, exampleMatcher);
+
         return clientRepository.findAll(clientFiltration);
     }
 

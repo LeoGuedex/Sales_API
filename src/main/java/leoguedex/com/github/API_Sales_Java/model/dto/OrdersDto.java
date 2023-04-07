@@ -4,7 +4,6 @@ import leoguedex.com.github.API_Sales_Java.validation.NotEmptyList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;

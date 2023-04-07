@@ -9,10 +9,8 @@ import leoguedex.com.github.API_Sales_Java.model.dto.ClientDTO;
 import leoguedex.com.github.API_Sales_Java.service.ClientService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -21,8 +19,11 @@ import java.util.List;
 @RequestMapping("/api/client")
 public class ClientController {
 
-    @Autowired
-    private ClientService clientService;
+    private final ClientService clientService;
+
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
     @PostMapping
     @ApiOperation(value = "Create a new client")
@@ -49,13 +50,11 @@ public class ClientController {
     @ResponseStatus(HttpStatus.OK)
     public void updateClient(@PathVariable Integer id, @RequestBody @Valid ClientDTO clientDTO) {
         ModelMapper mapper = new ModelMapper();
-
         TypeMap<ClientDTO, Client> typeMap = mapper.createTypeMap(ClientDTO.class, Client.class);
-        typeMap.addMappings(map -> map.map(ClientDTO::getName, Client::setName));
-        typeMap.addMappings(map -> map.map(ClientDTO::getCpf, Client::setCpf));
+        typeMap.addMappings(m -> m.map(ClientDTO::getName, Client::setName));
+        typeMap.addMappings(m -> m.map(ClientDTO::getCpf, Client::setCpf));
         Client client = mapper.map(clientDTO, Client.class);
         client.setId(id);
-
         clientService.updateClient(client);
     }
 

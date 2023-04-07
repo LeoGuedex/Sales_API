@@ -2,7 +2,6 @@ package leoguedex.com.github.API_Sales_Java.model.dto;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
-
 import javax.validation.constraints.NotEmpty;
 
 @Data

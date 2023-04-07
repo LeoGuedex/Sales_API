@@ -3,7 +3,6 @@ package leoguedex.com.github.API_Sales_Java.security;
 import leoguedex.com.github.API_Sales_Java.security.jwt.JwtAuthFilter;
 import leoguedex.com.github.API_Sales_Java.security.jwt.JwtService;
 import leoguedex.com.github.API_Sales_Java.service.UsersService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,11 +19,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UsersService usersService;
+    private final UsersService usersService;
 
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
+
+    public SecurityConfig(UsersService usersService, JwtService jwtService) {
+        this.usersService = usersService;
+        this.jwtService = jwtService;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -44,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
-                .disable() //desabilita da memoria os end points
+                .disable()
                 .authorizeRequests()
                 .antMatchers("/api/client/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/orders/**").hasAnyRole("USER", "ADMIN")
@@ -58,7 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
-                ;
     }
 
     @Override
